@@ -73,27 +73,44 @@ class PostsController < ApplicationController
     end
 
 
-    def preference_order
+    def preference_order      
       preference = get_preference(:post_order)
       preference == "oldest" ? :asc : :desc
     end
 
-    def get_reference(key)
-      return current_user.preference[key] if user_signed_in?
+    def get_preference(key)
+      if user_signed_in? && !key.nil?
+        puts ":post_order = #{key}"
+        if current_user.preference          
+          preference = current_user.preference[key]
+          puts "posts_controller signed in user get_preference(#{key}) current_user.preference[#{key}] = #{preference}" 
+          return current_user.preference[key] 
+        else 
+          # debugger
+          preferences = { post_order: "oldest", user_id: current_user.id }
+          current_user_preference = Preference.create(**preferences)
+          current_user_preference.save          
+          return current_user.preference[key]
+        end
+      end
       
-      return cookies[key] if cookies[key].present?
-     
+      if cookies[key].present?
+        puts "posts_controller not signed in user get_preference(#{key}) cookies[key]  = #{cookies[key]}" 
+        return cookies[key] 
+      end
+      puts "posts_controller has not signed in current_user.preference and has not cookies get_preference(#{key}) and use default preferences as =  oldiest"
       return "oldiest"
     end
 
     def update_preferences
-      puts "update_preferences"
-      preferences = { post_order: params[:preference] }
+      preferences = { post_order: params[:preference] }      
       
       if user_signed_in?
         Preference.update_user_preferences( current_user, preferences)
+        puts "posts_controller Preference.update_user_preferences = #{preferences}"
       else
         GuestPreferenceService.update_guest_preferences( cookies, preferences)
+        puts "posts_controller GuestPreferenceService.update_user_preferences = #{cookies} #{preferences}"
       end
     
     end

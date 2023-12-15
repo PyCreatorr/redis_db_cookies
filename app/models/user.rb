@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
 
   def self.update_user_preferences(user, preferences)
+    puts "User model user.preference.update(user=#{user}, preferences=#{preferences})"
     user.preference.update(preferences)
   end
 

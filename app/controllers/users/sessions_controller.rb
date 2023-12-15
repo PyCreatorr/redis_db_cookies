@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Users::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
 
@@ -9,10 +8,16 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   # POST /resource/sign_in
-  # def create
-  #   super
-  # end
+  def create
+    super
+    # if resource.persisted? - means - user signed in! 
+    # So we need to clear our guests cookies!
 
+    if resource.persisted? && GuestPreferenceService.guest_preferences_present?(cookies)
+      GuestPreferenceService.delete_guest_preferences(cookies)
+      puts "sessions controller, guest cookies deleted = #{cookies}" 
+    end  
+   end
   # DELETE /resource/sign_out
   # def destroy
   #   super

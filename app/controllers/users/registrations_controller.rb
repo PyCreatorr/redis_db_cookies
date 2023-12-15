@@ -10,9 +10,21 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  # Create preferences after the user has done the registration and delete guests preferences
+  def create
+    super
+    if resource.persisted?
+      preferences = { post_order: (cookies[:post_order] || "oldiest")}
+      
+      puts "registrations controller, preferences create = #{preferences}" 
+      # create model preference and save
+      resource.create_preference(preferences)
+      
+      # delete guest cookies
+      GuestPreferenceService.delete_guest_preferences(cookies)
+      puts "registrations controller,guest cookies deleted = #{cookies}" 
+    end
+  end
 
   # GET /resource/edit
   # def edit

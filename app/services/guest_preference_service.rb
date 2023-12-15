@@ -6,14 +6,17 @@ class GuestPreferenceService
       # :post_order => "newest" # key , value
       preferences.each do |key, value|
         cookies.permanent[key] = value
+        puts "Guest preference service, cookies.permanent[#{key}] = #{value}" 
+
       end
     end
 
     # METHOD FOR THE app/controllers/users/sessions_controller.rb
      # DELETE GUESTS COOKIES
-     def self.delete_quest_preferences(cookies)
+     def self.delete_guest_preferences(cookies)
         PREFERENCE_KEYS.each do |key|
           cookies.delete(key)
+          puts "Guest preference service, cookies.delete(#{key})"
         end
      end
 

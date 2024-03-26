@@ -17,11 +17,11 @@
 # Configurations
 # session_url = "#{ENV.fetch('REDIS_URL', 'redis://127.0.0.1:6379')}/0/session"
 
-session_url = ENV.fetch("REDIS_URL")
+#session_url = ENV.fetch("REDIS_URL")
 
-secure = Rails.env.production?
-key = Rails.env.production? ? "_app_session" : "_app_session_#{Rails.env}"
-domain = ENV.fetch("DOMAIN_NAME", "localhost")
+#secure = Rails.env.production?
+#key = Rails.env.production? ? "_app_session" : "_app_session_#{Rails.env}"
+#domain = ENV.fetch("DOMAIN_NAME", "localhost")
 
 # Rails.application.config.session_store :redis_store,
 #                                        url: session_url,
@@ -32,4 +32,11 @@ domain = ENV.fetch("DOMAIN_NAME", "localhost")
 #                                        same_site: :lax,
 #                                        httponly: true
 
-Rails.application.config.session_store :cookie_store, key: ENV.fetch("SESSION_STORE_KEY"), expire_after: 14.days
+
+# Rails.application.config.credentials.session_store_key
+# Rails.application.credentials.dig(:db_development, :local_db_password)
+# Rails.application.credentials.dig(:session_store_key)
+
+# Rails.application.config.session_store :cookie_store, key: ENV.fetch("SESSION_STORE_KEY"), expire_after: 14.days
+
+Rails.application.config.session_store :cookie_store, key: Rails.application.credentials.dig(:session_store_key), expire_after: 14.days

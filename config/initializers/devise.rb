@@ -126,7 +126,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = 'acd2f7089e9a9fbc3a9b929df36b350231d2d9ea2567c3881bf184e2fb914d7d11449988fb8a3520f4d5cbb638a87e73ce108226ef202055ccdbaee2a1d144f7'
+  config.pepper = 'acd2f7089e9a9fbc3a9b929df36b350231d2d9ea2567c3881bf184e2fb914d7d11449988fb8a3520f4d5cbb638a87e73ce108226ef202055ccdbaee2a1d144f7'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -240,6 +240,8 @@ Devise.setup do |config|
   # Require the `devise-encryptable` gem when using anything other than bcrypt
   # config.encryptor = :sha512
 
+  config.encryptor = :aes256
+
   # ==> Scopes configuration
   # Turn scoped views on. Before rendering "sessions/new", it will first check for
   # "users/sessions/new". It's turned off by default because it's slower if you
@@ -282,6 +284,12 @@ Devise.setup do |config|
   #   manager.default_strategies(scope: :user).unshift :some_external_strategy
   # end
 
+  # request.env['warden'].config[:default_strategies][:user].delete(:database_authenticatable)
+
+  # config.warden do |manager|
+  #   manager.default_strategies(scope: :user).delete(:database_authenticatable)
+  # end
+
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine
   # is mountable, there are some extra configurations to be taken into account.
@@ -305,9 +313,12 @@ Devise.setup do |config|
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
 
+  #config.navigational_formats = ['*/*', :html, :turbo_stream]
+
   # ==> Configuration for :registerable
 
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
 end

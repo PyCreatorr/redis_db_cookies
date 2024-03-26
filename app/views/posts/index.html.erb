@@ -1,12 +1,23 @@
 <p style="color: green"><%= notice %></p>
+<p style="color: red"><%= alert %></p>
+
+<% if current_user.present?%>
+  <p style="color: blue"><%= current_user.id %></p>
+  <p style="color: blue"><%= current_user.email %></p>
+  <p style="color: blue"><%= current_user.preference[:post_order] %></p>
+  <% @default_selected = current_user.preference[:post_order]%>
+<% end %>
 
 
 <%= form_with(url: posts_path, method: "get") do %>
   <% select_tag :preference, options_for_select([["Newest", "newest"], ["Oldest", "oldest"]], @default_selected),
   onchange: 'this.form.submit();' %>
 <% end %>
+<br>
 
-<%#= preference %>
+<%= link_to "New post", new_post_path %>
+
+<%#= :preference %>
 
 <h1>Posts</h1>
 
@@ -21,4 +32,4 @@
   <% end %>
 </div>
 
-<%= link_to "New post", new_post_path %>
+

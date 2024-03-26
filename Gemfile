@@ -34,7 +34,7 @@ gem "jbuilder"
 # gem "kredis"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
@@ -73,3 +73,24 @@ end
 
 gem "devise", "~> 4.9"
 gem "faker", "~> 3.2"
+
+# gem 'redis-client'
+
+gem 'redis'
+gem 'redis-namespace'
+gem 'redis-rails'
+
+gem 'redis-actionpack'
+
+gem 'dotenv', groups: [:development, :test]
+
+gem 'devise-encryptable'  
+gem 'aes'
+
+# gem 'psych'
+
+# gem 'rufus-lua-win' if Gem.win_platform?
+# gem 'rufus-lua'
+# gem 'rlua', '~> 1.2'
+
+# gem 'ruby-lua', '~> 0.4.0'

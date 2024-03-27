@@ -249,7 +249,7 @@ class PostsController < ApplicationController
 
      #debugger
 
-      # if user logged in and (1. have no guests cookies, else 2. save preference into db with oldiest and userId)
+      # if user logged in and (1. have no guests cookies, else 2. save preference into db with oldest and userId)
       if user_signed_in? && !key.nil?
         puts ":post_order = #{key}"
         if current_user.preference          
@@ -287,8 +287,8 @@ class PostsController < ApplicationController
         return cookies[key] 
       end
 
-      # If guest have no cookies at all - return default preference - oldiest
-      puts "posts_controller has not signed in current_user.preference and has not cookies get_preference(#{key}) and use default preferences as =  oldiest"
+      # If guest have no cookies at all - return default preference - oldest
+      puts "posts_controller has not signed in current_user.preference and has not cookies get_preference(#{key}) and use default preferences as =  oldest"
       return "oldest"
     end
 

@@ -163,7 +163,7 @@ class Users::SessionsController < Devise::SessionsController
         
         @redis.close()
         
-        debugger
+        # debugger
 
         redirect_to root_path
 

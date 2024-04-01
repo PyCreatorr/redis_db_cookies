@@ -247,40 +247,32 @@ class PostsController < ApplicationController
 
     def get_preference(key)
 
-     #debugger
+     # debugger
 
       # if user logged in and (1. have no guests cookies, else 2. save preference into db with oldest and userId)
       if user_signed_in? && !key.nil?
         puts ":post_order = #{key}"
-        if current_user.preference          
+        if current_user.present? && current_user.preference          
           #preference = current_user.preference[key]
 
           
           #puts "posts_controller signed in user get_preference(#{key}) current_user.preference[#{key}] = #{preference}" 
-          return { post_order: current_user.preference[key] , user_id: current_user.id }
+          #return { post_order: current_user.preference[key] , user_id: current_user.id }
+          return current_user.preference[key]
         else 
           # debugger
-          preferences = { post_order: "oldest", user_id: current_user.id }
+          # preferences = { post_order: "oldest", user_id: current_user.id }
 
           # current_user_preference = Preference.create(**preferences)
           # current_user_preference.save   
-          return { post_order: "oldest", user_id: current_user.id }     
+          
+          #return { post_order: "oldest", user_id: current_user.id }     
+          #preferences = { post_order: params[:preference] }
+          return "oldest"
           #return current_user.preference[key]
         end
-      end
+      end      
 
-      
-
-      # get cookie from the redis db
-      # if RedisPreferenceService.getSession(id).present?
-      #   puts "posts_controller guest RedisPreferenceService.getSession(#{id}) = #{RedisPreferenceService.getSession(id)}"
-      
-      # else 
-      #   preferences = { post_order: "oldest" }        
-      #   puts "posts_controller guest RedisPreferenceService.saveSession(#{id}) = #{RedisPreferenceService.getSession(id)}"
-      #   RedisPreferenceService.saveSession(preferences)
-      # end
-      
       # If cookies exists - return guest cookies
       if cookies[key].present?
         puts "posts_controller not signed in user get_preference(#{key}) cookies[key]  = #{cookies[key]}"
@@ -290,15 +282,21 @@ class PostsController < ApplicationController
       # If guest have no cookies at all - return default preference - oldest
       puts "posts_controller has not signed in current_user.preference and has not cookies get_preference(#{key}) and use default preferences as =  oldest"
       return "oldest"
+
     end
+
+
+
+
 
     def update_preferences
       preferences = { post_order: params[:preference] }   
       
       puts "SESSON = #{session}" 
-      #debugger
+      # debugger
       
-      if user_signed_in?
+      #if user_signed_in?
+      if current_user.present?
 
         # @redis = RedisService.set_redis()
         # @redis.hSet(RedisPreferenceService.usersKey(current_user.id), preferences)

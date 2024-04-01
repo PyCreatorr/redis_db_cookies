@@ -12,22 +12,42 @@ class ApplicationController < ActionController::Base
 
         c_user = nil
         
-        if session[:user_id]
+        if session[:user_id] && !@current_user.present?
             @redis = RedisService.set_redis()
             userHashes = @redis.hGetAll(RedisPreferenceService.usersKey(session[:user_id]))
             @redis.close()
 
-            c_user=User.new(id: session[:user_id], email: userHashes[1], password: userHashes[3], encrypted_password: userHashes[3])            
+            c_user=User.new(id: session[:user_id], email: userHashes[1], password: userHashes[3], encrypted_password: userHashes[3])
             # c_user.create_preference({post_order: userHashes[5]})   
             
             pref = Preference.new(id: session[:user_id], post_order: userHashes[5], user_id: c_user.id)
             
             c_user.preference = pref
-
             
-        end
+            @current_user = c_user if c_user
+            return @current_user
+            puts "THAT SHOULD NOT APPEAR!!!"
         
-        @current_user ||= c_user if c_user        
+
+        elsif session[:user_id] && @current_user.present?
+            @redis = RedisService.set_redis()
+            userHashes = @redis.hGetAll(RedisPreferenceService.usersKey(session[:user_id]))
+            @redis.close()
+
+            pref = Preference.new(id: session[:user_id], post_order: userHashes[5], user_id: @current_user.id)
+            
+            @current_user.preference = pref
+            return @current_user
+            puts "THAT SHOULD NOT APPEA2R!!!"
+        # debugger
+
+        end
+
+
+        puts "WHEN THE USER IS NOT SIGNED IN & HAVE NO SESSION!! #{session[:user_id]}"
+
+        @current_user ||= c_user if c_user
+        #@current_user = c_user if c_user
              
     end
 
